@@ -1,0 +1,10 @@
+# run postgrey
+docker run --hostname  postgres  -itd -e POSTGRES_USER=admin -e POSTGRES_PASSWORD=password -p 5432:5432 -v C:\\postgreData:/var/lib/postgresql/data --name postgresql postgres
+
+#run docker compose ealstic logstash
+cd C:\work\docker\elastic
+docker-compose up -d
+#change elastic default password
+docker exec -it elasticsearch-host bin/elasticsearch-setup-passwords interactive
+#add access postgrey database to elastic
+docker network connect elastic_default postgresql

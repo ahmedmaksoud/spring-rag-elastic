@@ -1,0 +1,146 @@
+DELETE /trade_names6
+
+POST /trade_names6/_close
+POST /trade_names6/_open
+
+
+
+PUT /trade_names6
+{
+  "settings": {
+    "analysis": {
+      "char_filter": {
+        "arabic_char_normalizer": {
+          "type": "mapping",
+          "mappings": [
+            "أ => ا",
+            "إ => ا",
+            "آ => ا",
+            "ة => ه",
+            "ى => ي"
+          ]
+        }
+      },
+      "analyzer": {
+        "arabic_custom_analyzer": {
+          "type": "custom",
+          "char_filter": ["arabic_char_normalizer"],
+          "tokenizer": "standard",
+          "filter": ["lowercase"]
+        }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+      "trade_name_en": {
+        "type": "text",
+        "analyzer": "arabic_custom_analyzer"
+      },
+       "trade_name_ar": {
+        "type": "text",
+        "analyzer": "arabic_custom_analyzer"
+      }
+
+    }
+  }
+}
+
+-----------------------------------------
+GET /test_small_td/_search
+{
+  "explain": true,
+  "query": {
+    "bool": {
+      "should": [
+        {
+          "match_phrase": {
+            "trd_name_en": {
+              "query" : "GLAM MAKEUP MAKEUP",
+              "_name": "phrase on name",
+              "boost": 8.0
+            }
+          }
+        },
+        {
+          "match": {
+            "trd_name_en": {
+              "query": "GLAM MAKEUP MAKEUP",
+              "operator": "and",
+              "_name": "all terms on name",
+              "boost": 2.0
+            }
+          }
+        },
+        {
+          "match": {
+            "trd_name_en": {
+              "query": "GLAM MAKEUP MAKEUP",
+              "operator": "or",
+              "_name": "at least one term on name",
+              "boost": 1.8
+            }
+          }
+        },
+        {
+          "match": {
+            "trd_name_en": {
+              "query": "GLAM MAKEUP MAKEUP",
+              "fuzziness": 2,
+              "_name": "fuzzy on name",
+              "boost": 1.0
+            }
+          }
+        }
+
+      ]
+
+      //,"minimum_should_match": "72%"
+    }
+  }
+
+}
+
+
+put /trade_names2/
+{
+ "settings": {
+        "analysis": {
+            "analyzer": {
+                "my_analyzer": {
+                    "tokenizer": "my_tokenizer"
+                }
+            },
+            "tokenizer": {
+                "my_tokenizer": {
+                    "type": "edge_ngram",
+                    "min_gram": 2,
+                    "max_gram": 10,
+                    "token_chars": [
+                        "letter",
+                        "digit"
+                    ]
+                }
+            }
+        },
+        "max_ngram_diff": 50
+    }
+}
+put trade_names2/_mapping
+{
+  "properties": {
+      "trade_name_ar": {
+       "type": "text",
+        "analyzer": "my_analyzer",
+        "search_analyzer": "standard"
+      },
+	"trade_name_en": {
+        "type": "text",
+        "analyzer": "my_analyzer",
+        "search_analyzer": "standard"
+      }
+
+
+}
+
+}
