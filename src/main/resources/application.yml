@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: rag-spring
+  ai:
+    ollama:
+      chat:
+        model: gemma2:2b #llama3.2
+  threads:
+    virtual:
+      #enabled: true
+server:
+  port: 8081
+  tomcat:
+    threads:
+      max: 1000
