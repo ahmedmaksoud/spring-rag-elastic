@@ -1,0 +1,4 @@
+
+
+- pipeline.id: trd666666666666666666666666666666666666
+  path.config: "/usr/share/logstash/pipeline/trd.conf"
