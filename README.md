@@ -1,2 +1,2 @@
-create rag application with spring boot and elasticsearch to generate similar trade names for dubai business names
+create rag application with spring boot and elasticsearch to generate suggested and similar trade names for dubai open data business names
 RAG Springboot ealsti serach Docker logstash OLLAMA LLM LLama AI Model
